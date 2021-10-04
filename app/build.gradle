@@ -58,4 +58,5 @@ dependencies {
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
     implementation 'com.github.mohammadatif:Animatoo:master'
+    implementation 'io.coil-kt:coil-base:0.13.0'
 }

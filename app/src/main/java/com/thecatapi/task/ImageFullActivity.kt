@@ -1,12 +1,20 @@
 package com.thecatapi.task
 
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import coil.ImageLoader
 import coil.load
+import coil.request.ImageRequest
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.thecatapi.task.Utils.Companion.toast
 import kotlinx.android.synthetic.main.activity_image_full.*
+import kotlinx.coroutines.launch
 
 
 class ImageFullActivity: AppCompatActivity() {
@@ -40,8 +48,18 @@ class ImageFullActivity: AppCompatActivity() {
                 item ->
             when (item.itemId) {
                 R.id.btn_download_image -> {
-                    // put your code here
-                    println("icon download is clicked.\nImage ${catId} will be downloaded from\n${catImageUrl}")
+                    var uri: Uri = Uri.EMPTY
+                    lifecycleScope.launch {
+                        item.isEnabled = false
+                        val context = this@ImageFullActivity
+                        val imageLoader = ImageLoader(context)
+                        val request = ImageRequest.Builder(context)
+                            .data(catImageUrl)
+                            .build()
+                        val drawable = imageLoader.execute(request).drawable
+                        uri = saveImage(drawable, catId.toString())
+                    }
+                    toast("Image saved : $uri")
                     true
                 }
             }
@@ -49,5 +67,17 @@ class ImageFullActivity: AppCompatActivity() {
         }
 
         return true
+    }
+
+    private fun saveImage(drawable: Drawable?, title: String): Uri {
+        val bitmap = (drawable as BitmapDrawable).bitmap
+        val savedImageURL = MediaStore.Images.Media.insertImage(
+            contentResolver,
+            bitmap,
+            title,
+            "Image of $title"
+        )
+
+        return Uri.parse(savedImageURL)
     }
 }
