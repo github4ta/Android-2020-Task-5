@@ -34,7 +34,6 @@ class CatAdapter : RecyclerView.Adapter<CatViewHolder>() {
         holder.bind(catId, catImageUrl)
 
         holder.itemView.setOnClickListener {
-            println("click image id: $catId")
             intent.putExtra("CAT_ID", catId)
             intent.putExtra("CAT_IMAGE_URL", catImageUrl)
             context.startActivity(intent)

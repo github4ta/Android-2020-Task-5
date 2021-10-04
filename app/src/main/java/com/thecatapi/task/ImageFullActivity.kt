@@ -48,18 +48,18 @@ class ImageFullActivity: AppCompatActivity() {
                 item ->
             when (item.itemId) {
                 R.id.btn_download_image -> {
-                    var uri: Uri = Uri.EMPTY
                     lifecycleScope.launch {
                         item.isEnabled = false
+                        item.isVisible = false
                         val context = this@ImageFullActivity
                         val imageLoader = ImageLoader(context)
                         val request = ImageRequest.Builder(context)
                             .data(catImageUrl)
                             .build()
                         val drawable = imageLoader.execute(request).drawable
-                        uri = saveImage(drawable, catId.toString())
+                        val uri = saveImage(drawable, catId.toString())
+                        toast("Image saved : $uri")
                     }
-                    toast("Image saved : $uri")
                     true
                 }
             }
