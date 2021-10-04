@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CatsApp</string>
+    <string name="action_download">Download image to the Gallery</string>
 </resources>
